@@ -1,18 +1,18 @@
 let modInfo = {
-	name: "The ??? Tree",
-	author: "nobody",
-	pointsName: "points",
-	modFiles: ["layers.js", "tree.js"],
+	name: "The Tier Power Tree",
+	author: "liam",
+	pointsName: "tier 0 power",
+	modFiles: ["one.js", "achievements.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
+	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
+	num: "1.0",
 	name: "Literally nothing",
 }
 
@@ -41,8 +41,16 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(1)
-	return gain
+	base = new Decimal(1)
+	mult = new Decimal(1)
+	exp = new Decimal(1)
+	if (hasUpgrade('one', 11)) base = base.add(1)
+	if (hasUpgrade('one', 12)) mult = mult.times(upgradeEffect('one', 12))
+	if (hasUpgrade('one', 14)) mult = mult.times(2)
+	if (hasUpgrade('one', 21)) base = base.add(buyableEffect('one', 11))
+	if (hasUpgrade('one', 21)) mult = mult.times(buyableEffect('one', 12))
+
+	return base.times(mult).pow(exp)
 }
 
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
